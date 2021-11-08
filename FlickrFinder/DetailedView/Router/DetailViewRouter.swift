@@ -6,28 +6,19 @@
 //
 
 import Foundation
+import UIKit
 
-protocol DetailedViewPresenterToRouterProtocol: class {
-    /// Create and return EQDetailViewController
-    static func createEQDetailViewController() -> DetailedViewController
+protocol DetailViewPresenterToRouterProtocol: AnyObject {
+    static func createDetailViewController() -> DetailViewController
 }
 
-class DetailedViewRouter: DetailedViewPresenterToRouterProtocol{
-    
+class DetailViewRouter: DetailViewPresenterToRouterProtocol {
     // MARK: - Methods
-    class func createModule() -> UIViewController {
-        
-        let view = SearchTableViewController()
-        let presenter: SearchViewToPresenterProtocol & SearchViewInteractorToPresenterProtocol = SearchViewPresenter()
-        let interactor: SearchViewPresentorToInteractorProtocol = SearchViewInteractor()
-        let router: SearchViewPresenterToRouterProtocol = SearchViewRouter()
-        
-        view.presenter = presenter
-        presenter.view = view
-        presenter.router = router
-        presenter.interactor = interactor
-        interactor.presenter = presenter
-        
-        return view
+    static func createDetailViewController() -> DetailViewController {
+        let viewController = DetailViewController()
+        let presenter: DetailViewToPresenterProtocol = DetailViewPresenter()
+
+        viewController.presenter = presenter
+        return viewController
     }
 }

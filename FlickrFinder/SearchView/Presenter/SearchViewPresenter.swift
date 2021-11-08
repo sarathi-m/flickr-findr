@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SearchPresenter: SearchViewToPresenterProtocol {
+class SearchViewPresenter: SearchViewToPresenterProtocol {
 
     // MARK: - Properties
     weak var view: SearchViewPresenterToViewProtocol?
@@ -15,27 +15,49 @@ class SearchPresenter: SearchViewToPresenterProtocol {
     var router: SearchViewPresenterToRouterProtocol?
     
     // MARK: - Methods
-    func updateView() {
-        interactor?.fetchSearchResult()
+    func searchRequest(text: String) {
+        interactor?.fetchSearchResult(text: text)
     }
     
-    func getNewsListCount() -> Int? {
+    func nextPageRequest() {
+        interactor?.fetchNextPage()
+    }
+    
+    func getPhotosCount() -> Int? {
         return interactor?.photos?.photo?.count
+    }
+    
+    func isPageLoaderNeeded() -> Bool {
+        return interactor?.photos?.photo?.count ?? 0 >= 25
     }
     
     func getPhoto(index: Int) -> Photo? {
         return interactor?.photos?.photo?[index]
     }
+    
+    func navigateToDetailView(fromRow row: Int?) {
+        guard let tempRow = row, let photo = interactor?.photos?.photo?[tempRow] else {
+            return
+        }
+        
+        if let server = photo.server, let id = photo.id, let sercet = photo.secret {
+            router?.launchDetailViewController(fromView: view, imageUrl: "\(image_base_url)\(server)/\(id)_\(sercet)_b.png")
+        }
+    }
 }
 
 // MARK: - SearchViewInteractorToPresenterProtocol
-extension SearchPresenter: SearchViewInteractorToPresenterProtocol {
+extension SearchViewPresenter: SearchViewInteractorToPresenterProtocol {
+    func nextPageFetched() {
+        view?.showNextPage()
+    }
+    
     func searchResultFetched() {
         view?.showSearchResult()
     }
     
-    func searchFailed() {
-        view?.showError()
+    func searchFailed(error: NetworkError) {
+        view?.showError(description: error.description)
     }
 }
 

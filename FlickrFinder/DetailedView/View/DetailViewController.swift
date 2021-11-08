@@ -12,12 +12,14 @@ class DetailViewController: UIViewController {
     //MARK: IBOutlets
     @IBOutlet weak var imageView: UIImageView!
     
-    // MARK: - Properties
+    //MARK: Presenter
+    var presenter: DetailViewToPresenterProtocol?
     
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        imageView.downloadImage(url: presenter?.imageUrl)
     }
     
 }

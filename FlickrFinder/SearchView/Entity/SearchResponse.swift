@@ -11,4 +11,6 @@ import Foundation
 struct SearchResponse: Codable {
     let photos: Photos?
     let stat: String?
+    let code: Int?
+    let message: String?
 }

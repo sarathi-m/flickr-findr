@@ -1,6 +1,6 @@
 //
 //  NetworkManager.swift
-//  Feeds
+//  FlickrFinder
 //
 //  Created by Sarathi Murugesan on 11/4/21.
 //
@@ -13,6 +13,7 @@ enum NetworkError: Error {
     case StatusCodeError(code: Int)
     case DataNotFoundError
     case ParseError(description: String)
+    case CustomError(description: String)
     
     var description: String {
         switch self {
@@ -26,6 +27,8 @@ enum NetworkError: Error {
             return "Parsing Error. \(desc)"
         case .StatusCodeError(let code):
             return "Error with status code \(code)"
+        case .CustomError(let desc):
+            return "\(desc)"
         }
     }
 }
@@ -45,14 +48,14 @@ class NetworkManager {
                 dataHandler(.failure(.ServerError(description: error.localizedDescription)))
             }
             
-            if let httpresponse = response as? HTTPURLResponse, httpresponse.statusCode != 200 {
-                dataHandler(.failure(.StatusCodeError(code: httpresponse.statusCode)))
-            }
-            
             guard let dataResponse = data else {
                 return dataHandler(.failure(.DataNotFoundError))
             }
             
+            if let httpresponse = response as? HTTPURLResponse, httpresponse.statusCode != 200 {
+                dataHandler(.failure(.StatusCodeError(code: httpresponse.statusCode)))
+            }
+
             do {
                 let decodedData = try JSONDecoder().decode(T.self, from: dataResponse)
                 dataHandler(.success(decodedData))

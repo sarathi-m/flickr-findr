@@ -8,10 +8,12 @@
 import UIKit
 
 class SearchTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var thumbNail: UIImageView!
-    @IBOutlet weak var title: UILabel!
     
+    //MARK: IBOutlets
+    @IBOutlet weak var thumbNail: UIImageView!
+    @IBOutlet weak var titleLbl: UILabel!
+    
+    // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -22,7 +24,10 @@ class SearchTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func loadCell(_ objEQHomeViewDisplayEntity: Photo) {
-
+    func loadCellFor(_ photo: Photo?) {
+        titleLbl.text = photo?.title
+        if let server = photo?.server, let id = photo?.id, let sercet = photo?.secret {
+            thumbNail.downloadImage(url: "\(image_base_url)\(server)/\(id)_\(sercet)_s.png")
+        }
     }
 }

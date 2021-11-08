@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoadingCell: UITableViewCell {
+class LoadingMoreCell: UITableViewCell {
     var activityIndicator: UIActivityIndicatorView = {
         let activity =  UIActivityIndicatorView()
         activity.backgroundColor = UIColor.clear

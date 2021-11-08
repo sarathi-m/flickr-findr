@@ -1,6 +1,6 @@
 //
 //  Model.swift
-//  FlickrFindr
+//  FlickrFinder
 //
 //  Created by Sarathi Murugesan on 11/4/21.
 //
@@ -9,8 +9,9 @@ import Foundation
 
 // MARK: - Photos
 struct Photos: Codable {
-    let page, pages, perpage, total: Int?
-    let photo: [Photo]?
+    var page: Int?
+    let pages, perpage, total: Int?
+    var photo: [Photo]?
 }
 
 // MARK: - Photo
